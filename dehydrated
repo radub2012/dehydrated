@@ -788,7 +788,7 @@ init_system() {
           echo "ZeroSSL requires contact email to be set or EAB_KID/EAB_HMAC_KEY to be manually configured"
           FAILED=true
         else
-          zeroapi="$(curl -s "https://api.zerossl.com/acme/eab-credentials-email" -d "email=${CONTACT_EMAIL}" | jsonsh)"
+          zeroapi="$(curl ${ip_version:-} ${CURL_OPTS} -A "dehydrated/${VERSION} curl/${CURL_VERSION}" -s "https://api.zerossl.com/acme/eab-credentials-email" -d "email=${CONTACT_EMAIL}" | jsonsh)"
           EAB_KID="$(printf "%s" "${zeroapi}" | get_json_string_value eab_kid)"
           EAB_HMAC_KEY="$(printf "%s" "${zeroapi}" | get_json_string_value eab_hmac_key)"
           if [[ -z "${EAB_KID:-}" ]] ||  [[ -z "${EAB_HMAC_KEY:-}" ]]; then
